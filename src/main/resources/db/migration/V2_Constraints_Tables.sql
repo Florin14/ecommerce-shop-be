@@ -1,0 +1,11 @@
+-- ALTER TABLE brand
+--     ADD CONSTRAINT UK_brand_name UNIQUE (name);
+--
+-- ALTER TABLE categories
+--     ADD CONSTRAINT UK_category_name UNIQUE (name);
+--
+-- ALTER TABLE genders
+--     ADD CONSTRAINT UK_gender_name UNIQUE (name);
+--
+-- ALTER TABLE products
+--     ADD CONSTRAINT UK_product_name UNIQUE (name);
