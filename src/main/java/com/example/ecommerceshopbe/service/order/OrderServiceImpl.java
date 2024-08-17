@@ -4,10 +4,10 @@ import com.example.ecommerceshopbe.controller.dto.request.OrderRequestDTO;
 import com.example.ecommerceshopbe.controller.dto.request.ProductRequestDTO;
 import com.example.ecommerceshopbe.dao.model.Order;
 import com.example.ecommerceshopbe.dao.model.Product;
-import com.example.ecommerceshopbe.dao.model.User;
+//import com.example.ecommerceshopbe.dao.model.User;
 import com.example.ecommerceshopbe.dao.repository.OrderRepository;
 import com.example.ecommerceshopbe.dao.repository.ProductRepository;
-import com.example.ecommerceshopbe.dao.repository.UserRepository;
+//import com.example.ecommerceshopbe.dao.repository.UserRepository;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
 
     @Override
     public Optional<Order> findById(Long id) {
@@ -42,8 +42,8 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         if(orderDTO.getUserId() != null) {
-            final User user = getUserRepository().findById(orderDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
-            orderToBeSaved.setUser(user);
+//            final User user = getUserRepository().findById(orderDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
+//            orderToBeSaved.setUser(user);
         }
         return orderRepository.save(orderToBeSaved);
 

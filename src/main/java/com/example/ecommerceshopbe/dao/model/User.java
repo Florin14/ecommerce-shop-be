@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @Table(
         name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(name = "email_unique", columnNames = "username")}
+                @UniqueConstraint(name = "email_unique", columnNames = "email")}
 )
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,11 +45,18 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(
-            name = "full_name",
+            name = "first_name",
             nullable = false,
             columnDefinition = "TEXT"
     )
-    private String fullName;
+    private String firstName;
+
+    @Column(
+            name = "last_name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String lastName;
 
     @Column(
             name = "password",
@@ -59,17 +66,24 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
 
+
     @Column(
             name = "username",
-            nullable = false,
+            nullable = true,
             columnDefinition = "TEXT"
     )
     private String username;
 
+
+    @Column(
+            name = "email",
+            nullable = false,
+            unique = true,
+            columnDefinition = "TEXT"
+    )
+    private String email;
+
     private Date birthdate;
-
-
-    private String description;
 
     @Enumerated(EnumType.STRING)
     private Role role;

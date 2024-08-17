@@ -1,6 +1,7 @@
 package com.example.ecommerceshopbe.service.product;
 
 import com.example.ecommerceshopbe.controller.dto.request.ProductRequestDTO;
+import com.example.ecommerceshopbe.controller.dto.request.ProductSizeStockRequestDTO;
 import com.example.ecommerceshopbe.dao.model.Product;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,7 @@ public interface ProductService {
 
     List<Product> getAll();
 
-    Product saveProduct(ProductRequestDTO productRequestDTO, List<MultipartFile> images);
+    Product saveProduct(ProductRequestDTO productRequestDTO, List<ProductSizeStockRequestDTO> productStock);
 
     Product updateProduct(ProductRequestDTO productRequestDTO, Long id);
 

@@ -1,10 +1,11 @@
 package com.example.ecommerceshopbe.controller.dto.response.product;
 
+import com.example.ecommerceshopbe.controller.dto.response.product_image.ProductImageResponseDTO;
+import com.example.ecommerceshopbe.controller.dto.response.product_size.ProductSizeStockResponseDTO;
 import lombok.Builder;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,7 +14,8 @@ public class ProductResponseDTO {
     private String name;
     private String description;
     private double price;
-    private int stockQuantity;
     private String categoryName;
     private String brandName;
+    List<ProductImageResponseDTO> images;
+    List<ProductSizeStockResponseDTO> productStock;
 }
