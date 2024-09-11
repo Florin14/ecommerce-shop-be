@@ -1,7 +1,8 @@
 package com.example.ecommerceshopbe.service.users;
 
-import com.example.ecommerceshopbe.controller.dto.request.UserRegisterRequestDTO;
+import com.example.ecommerceshopbe.controller.dto.request.UserRequestDTO;
 import com.example.ecommerceshopbe.dao.model.User;
+import com.example.ecommerceshopbe.dao.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.ecommerceshopbe.dao.repository.*;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 
 @Service("userService")
 @RequiredArgsConstructor
@@ -19,11 +23,7 @@ import com.example.ecommerceshopbe.dao.repository.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final StudyRepository studyRepository;
-    private final InterestAreaRepository interestAreaRepository;
-    private final AppointmentRepository appointmentRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserProfileRequestMapper userProfileUpdateMapper;
 
     @Override
     public List<User> getAll() {
@@ -36,10 +36,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(UserRegisterRequestDTO userDTO) {
+    public User saveUser(UserRequestDTO userDTO) {
 
+        validateEmailExists(userDTO.getUsername());
 
         final User userToBeSaved = User.builder()
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
                 .password(userDTO.getPassword())
                 .role(userDTO.getRole())
                 .build();
@@ -58,7 +61,8 @@ public class UserServiceImpl implements UserService {
 
         validateEmailExists(userDTO.getUsername());
 
-        userToUpdate.setFullName(userDTO.getFullName());
+        userToUpdate.setFirstName(userDTO.getFirstName());
+        userToUpdate.setLastName(userDTO.getLastName());
         userToUpdate.setUsername(userDTO.getUsername());
         userToUpdate.setPassword(userDTO.getPassword());
         userToUpdate.setRole(userDTO.getRole());
@@ -79,17 +83,18 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public User updateProfile(ProfileRequestDTO profileRequestDTO) {
-
-        final User user = getUserById(profileRequestDTO.getId()).orElseThrow(EntityNotFoundException::new);
-        getUserProfileUpdateMapper().update(user, profileRequestDTO, passwordEncoder);
-
-        userRepository.save(user);
-
-        return user;
-    }
+//    @Override
+//    @Transactional
+//    public User updateProfile(ProfileRequestDTO profileRequestDTO) {
+//
+//        final User user = getUserById(profileRequestDTO.getId()).orElseThrow(EntityNotFoundException::new);
+//        getUserProfileUpdateMapper().update(user, profileRequestDTO);
+//
+//        userRepository.save(user);
+//
+//        return user;
+//
+//    }
 
     void validateEmailExists(String email) {
         Optional<User> userOptional = userRepository.findByUsername(email);
@@ -100,6 +105,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * creates a partial user based on the email (= username)
+     *
      * @param username is the email
      * @return the found user
      * @throws UsernameNotFoundException in case there is no user to be found
@@ -112,14 +118,22 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + username));
     }
 
-    public List<User> getAllMentors() {
-        return userRepository.findAllByRole(Role.MENTOR);
-    }
+//    public List<User> getAllMentors() {
+//        return userRepository.findAllByRole(Role.MENTOR);
+//    }
 
-    @Override
-    public List<User> findAllAnnouncementsUsersByMentor(User mentor) {
-
-        List<Long> studentsId = getAppointmentRepository().findAllStudentsByMentorId(mentor.getId());
-        return getUserRepository().findAllById(studentsId);
-    }
+//    @Override
+//    public Optional<UserProfilePicture> findUserProfilePicture(Long userId) {
+//        return userProfilePictureRepository.findProfilePictureByUserId(userId);
+//    }
+//
+//    @Override
+//    public UserProfilePicture saveUserProfilePicture(UserProfilePicture userDTO) {
+//        return userProfilePictureRepository.save(userDTO);
+//    }
+//
+//    @Override
+//    public void updateUserProfilePicture(Long userId, byte[] imageData) {
+//        userProfilePictureRepository.updateProfilePictureByUserId(userId, imageData);
+//    }
 }

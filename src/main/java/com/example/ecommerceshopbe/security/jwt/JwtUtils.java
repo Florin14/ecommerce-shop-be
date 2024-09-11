@@ -1,6 +1,6 @@
 package com.example.ecommerceshopbe.security.jwt;
 
-//import com.example.ecommerceshopbe.dao.model.User;
+import com.example.ecommerceshopbe.dao.model.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ public class JwtUtils {
     @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-//    public String generateJwtCookie(User userPrincipal) {
-//        return generateTokenFromEmail(userPrincipal.getEmail());
-//    }
+    public String generateJwtCookie(User userPrincipal) {
+        return generateTokenFromUsername(userPrincipal.getUsername());
+    }
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
@@ -44,9 +44,9 @@ public class JwtUtils {
         return false;
     }
 
-    public String generateTokenFromEmail(String email) {
+    public String generateTokenFromUsername(String username) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

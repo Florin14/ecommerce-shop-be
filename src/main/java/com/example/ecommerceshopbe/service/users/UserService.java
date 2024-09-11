@@ -1,7 +1,6 @@
 package com.example.ecommerceshopbe.service.users;
 
-
-import com.example.ecommerceshopbe.controller.dto.request.UserRegisterRequestDTO;
+import com.example.ecommerceshopbe.controller.dto.request.UserRequestDTO;
 import com.example.ecommerceshopbe.dao.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -11,11 +10,10 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
 
     List<User> getAll();
-    List<User> getAllMentors();
 
     Optional<User> getUserById(Long id);
 
-    User saveUser(UserRegisterRequestDTO userDTO);
+    User saveUser(UserRequestDTO userDTO);
 
     User updateUser(Long id, UserRequestDTO userDTO);
 
@@ -23,7 +21,10 @@ public interface UserService extends UserDetailsService {
 
     void deleteUserById(Long id);
 
-    User updateProfile(ProfileRequestDTO profileRequestDTO);
 
-    List<User> findAllAnnouncementsUsersByMentor(User mentor);
+//    Optional<UserProfilePicture> findUserProfilePicture(Long userId);
+//
+//    UserProfilePicture saveUserProfilePicture(UserProfilePicture userProfilePicture);
+//
+//    void updateUserProfilePicture(Long userId, byte[] imageData);
 }

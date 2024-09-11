@@ -1,9 +1,10 @@
 package com.example.ecommerceshopbe.controller;
 
 import com.example.ecommerceshopbe.controller.dto.request.UserLoginRequestDTO;
-import com.example.ecommerceshopbe.controller.dto.request.UserRegisterRequestDTO;
+import com.example.ecommerceshopbe.controller.dto.request.UserRequestDTO;
 import com.example.ecommerceshopbe.controller.dto.response.JWTResponseDTO;
 import com.example.ecommerceshopbe.dao.model.User;
+import com.example.ecommerceshopbe.security.jwt.JwtUtils;
 import com.example.ecommerceshopbe.service.users.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +18,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import com.example.ecommerceshopbe.security.jwt.JwtUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import com.example.ecommerceshopbe.service.users.UserService;
-
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -41,7 +40,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody UserRegisterRequestDTO user) {
+    public ResponseEntity<User> register(@Valid @RequestBody UserRequestDTO user) {
 
         URI uri = URI.create((ServletUriComponentsBuilder.fromCurrentContextPath().path("/register").toUriString()));
 
@@ -64,12 +63,13 @@ public class AuthController {
                                     userLoginDTO.getEmail(), userLoginDTO.getPassword()
                             )
                     );
+
             final User user = (User) authenticate.getPrincipal();
 
             return ResponseEntity.ok().body(
                     JWTResponseDTO
                             .builder()
-                            .value(getJwtUtils().generateTokenFromEmail(userLoginDTO.getEmail()))
+                            .value(getJwtUtils().generateJwtCookie(user))
                             .email(user.getUsername())
                             .authorities(Set.of(user.getRole().toString()))
                             .build()
